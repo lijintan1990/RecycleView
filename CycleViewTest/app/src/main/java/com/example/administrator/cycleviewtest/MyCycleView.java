@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -18,12 +19,31 @@ public class MyCycleView extends AppCompatActivity {
         setContentView(R.layout.activity_my_cycle_view);
 
         initCat();
-        RecyclerView recyclerView = findViewById(R.id.recycleView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        final RecyclerView recyclerView = findViewById(R.id.recycleView);
+        //LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        ScrollSpeedLinearLayoutManger layoutManager = new ScrollSpeedLinearLayoutManger(this);
+        layoutManager.setSpeedSlow();
+        //横向的recycleview
+        //layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        //StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         CatAdapter adapter = new CatAdapter(catList);
         recyclerView.setAdapter(adapter);
+
+        final Thread tr  = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i=0; i!=1; i++) {
+                    try {
+                        Thread.sleep(1000);
+                        recyclerView.smoothScrollToPosition(8);
+                    } catch (InterruptedException e) {
+
+                    }
+                }
+            }
+        });
+        tr.start();
     }
 
     private void initCat() {
@@ -43,5 +63,12 @@ public class MyCycleView extends AppCompatActivity {
         catList.add(cat7);
         Cat cat8 = new Cat("cat8", R.drawable.dahuangmao08);
         catList.add(cat8);
+
+
+        catList.add(cat6);
+        Cat cat9 = new Cat("cat7", R.drawable.dahuangmao07);
+        catList.add(cat9);
+        Cat cat10 = new Cat("cat8", R.drawable.dahuangmao08);
+        catList.add(cat10);
     }
 }
